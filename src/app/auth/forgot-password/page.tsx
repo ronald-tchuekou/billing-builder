@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { forgetPassword } from "@/lib/auth-client";
+import { requestPasswordReset } from "@/lib/auth-client";
 import { forgotSchema, type ForgotInput } from "@/features/auth/schemas";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ export default function ForgotPasswordPage() {
   } = useForm<ForgotInput>({ resolver: zodResolver(forgotSchema) });
 
   async function onSubmit(values: ForgotInput) {
-    const { error } = await forgetPassword({
+    const { error } = await requestPasswordReset({
       email: values.email,
       redirectTo: "/auth/reset-password",
     });

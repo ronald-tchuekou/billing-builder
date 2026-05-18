@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { createElement } from "react";
-import { renderToBuffer } from "@react-pdf/renderer";
+import { createElement, type ReactElement } from "react";
+import { renderToBuffer, type DocumentProps } from "@react-pdf/renderer";
 import { db } from "@/lib/db";
 import { getServerSession } from "@/lib/helpers/session";
 import { InvoiceDocument } from "@/features/invoices/pdf/InvoiceDocument";
@@ -23,9 +23,10 @@ export async function GET(_req: Request, ctx: Ctx) {
   if (!row) return new NextResponse("Not found", { status: 404 });
 
   const invoice = JSON.parse(JSON.stringify(row)) as InvoiceWithRelations;
-  const buffer = await renderToBuffer(createElement(InvoiceDocument, { invoice }));
+  const element = createElement(InvoiceDocument, { invoice }) as unknown as ReactElement<DocumentProps>;
+  const buffer = await renderToBuffer(element);
 
-  return new NextResponse(buffer, {
+  return new NextResponse(new Uint8Array(buffer), {
     status: 200,
     headers: {
       "Content-Type": "application/pdf",
