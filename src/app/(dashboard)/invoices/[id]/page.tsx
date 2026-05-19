@@ -68,7 +68,7 @@ export default function InvoiceDetailPage() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Prestations</CardTitle>
-          <Badge variant={data.status === "paid" ? "success" : "secondary"}>
+          <Badge variant={data.status === "paid" ? "default" : "secondary"}>
             {data.status}
           </Badge>
         </CardHeader>

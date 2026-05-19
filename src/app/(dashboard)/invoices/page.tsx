@@ -84,7 +84,7 @@ export default function InvoicesPage() {
                       <TableCell>{formatCurrency(billed, inv.currency)}</TableCell>
                       <TableCell>{formatCurrency(remaining, inv.currency)}</TableCell>
                       <TableCell>
-                        <Badge variant={inv.status === "paid" ? "success" : "secondary"}>
+                        <Badge variant={inv.status === "paid" ? "default" : "secondary"}>
                           {inv.status}
                         </Badge>
                       </TableCell>
