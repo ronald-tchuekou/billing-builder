@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
-import { invoices, invoiceItems, clients } from "@/lib/db/schema";
-import { eq, sql, desc, and, gte } from "drizzle-orm";
+import { invoices, clients } from "@/lib/db/schema";
+import { eq, sql, and, gte } from "drizzle-orm";
 
 export type MonthlyRevenue = { month: string; revenue: number };
 
