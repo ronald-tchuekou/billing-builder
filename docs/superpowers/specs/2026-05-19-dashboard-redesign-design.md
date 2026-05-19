@@ -35,7 +35,7 @@ npx shadcn@latest add sidebar chart command avatar
 | `src/services/invoices.ts` | Add `getMonthlyRevenue(userId, months)` |
 
 ### Sidebar structure
-- **Logo area:** indigo square icon + "Billing Builder" wordmark
+- **Logo area:** `public/billing-builder-icon.png` via Next.js `<Image>` (32×32) + "Billing Builder" wordmark
 - **Search bar:** `⌘K` trigger → opens `Command` dialog (navigate to any page)
 - **Group "Principal":** Dashboard · Factures · Clients
 - **Group "Compte":** Profil · Paramètres
@@ -165,8 +165,15 @@ All data needed (invoices, items, payments, clients) already exists.
 
 ---
 
-## 7. Out of Scope
-- Dark mode toggle (not requested)
+## 7. Dark Mode Toggle
+
+- Toggle button in the topbar header (sun/moon icon)
+- Uses `next-themes` (already installed) — `ThemeProvider` already in `Providers.tsx`
+- `globals.css` already has `.dark` CSS vars — verify they work with Tailwind v4 `@custom-variant dark`
+- Toggle persists in `localStorage` via next-themes
+- Sidebar, cards, chart, badges all respect dark vars automatically via CSS custom properties
+
+## 8. Out of Scope
 - Real-time updates / websockets
 - Invoice PDF template redesign
 - Email template redesign
