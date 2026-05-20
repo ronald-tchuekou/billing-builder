@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { FadeInUp } from "@/components/ui/motion";
 import {
   issuerSettingsSchema,
   type IssuerSettingsInput,
@@ -43,9 +44,12 @@ export default function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <h1 className="text-3xl font-bold">Paramètres</h1>
+      <FadeInUp>
+        <h1 className="text-3xl font-bold">Paramètres</h1>
+      </FadeInUp>
 
-      <Card>
+      <FadeInUp delay={0.1}>
+        <Card>
         <CardHeader>
           <CardTitle>Émetteur (apparaît sur les factures PDF)</CardTitle>
           <CardDescription>
@@ -118,7 +122,8 @@ export default function SettingsPage() {
             </div>
           </form>
         </CardContent>
-      </Card>
+        </Card>
+      </FadeInUp>
     </div>
   );
 }

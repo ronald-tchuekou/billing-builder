@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { FadeInUp } from "@/components/ui/motion";
 import { profileSchema, type ProfileInput } from "@/features/profile/schemas";
 import { useMe, useUpdateMe } from "@/features/profile/hooks";
 
@@ -26,8 +27,11 @@ export default function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-3xl font-bold">Profil</h1>
-      <Card>
+      <FadeInUp>
+        <h1 className="text-3xl font-bold">Profil</h1>
+      </FadeInUp>
+      <FadeInUp delay={0.1}>
+        <Card>
         <CardHeader>
           <CardTitle>Informations personnelles</CardTitle>
           <CardDescription>Nom et email de connexion.</CardDescription>
@@ -57,7 +61,8 @@ export default function ProfilePage() {
             </div>
           </form>
         </CardContent>
-      </Card>
+        </Card>
+      </FadeInUp>
     </div>
   );
 }
