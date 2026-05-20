@@ -2,10 +2,17 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 
 export async function getServerSession() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  return session;
+  const hdrs = await headers();
+  try {
+    return await auth.api.getSession({ headers: hdrs });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    if (msg.includes("fetch failed") || msg.includes("NeonDbError")) {
+      await new Promise((r) => setTimeout(r, 500));
+      return await auth.api.getSession({ headers: hdrs });
+    }
+    throw err;
+  }
 }
 
 export async function requireSession() {
