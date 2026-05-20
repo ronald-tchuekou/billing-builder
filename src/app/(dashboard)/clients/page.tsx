@@ -43,6 +43,38 @@ function getInitials(name: string): string {
     .join("");
 }
 
+function AddClientDialog({
+  open,
+  onOpenChange,
+  onSubmit,
+  triggerLabel,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (values: ClientInput) => Promise<void>;
+  triggerLabel: string;
+}) {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogTrigger asChild>
+        <Button>
+          <Plus className="mr-2 h-4 w-4" />
+          {triggerLabel}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Nouveau client</DialogTitle>
+          <DialogDescription>
+            Remplissez les informations du client.
+          </DialogDescription>
+        </DialogHeader>
+        <ClientForm submitLabel="Créer le client" onSubmit={onSubmit} />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function ClientCard({
   client,
   onDelete,
@@ -134,14 +166,18 @@ function SkeletonCard() {
 }
 
 export default function ClientsPage() {
-  const { data, isLoading } = useClients();
+  const { data, isLoading, isError } = useClients();
   const create = useCreateClient();
   const remove = useDeleteClient();
   const [open, setOpen] = useState(false);
 
   async function handleCreate(values: ClientInput) {
-    await create.mutateAsync(values);
-    setOpen(false);
+    try {
+      await create.mutateAsync(values);
+      setOpen(false);
+    } catch {
+      // hook's onError handles toast
+    }
   }
 
   const clients: Client[] = data ?? [];
@@ -155,26 +191,17 @@ export default function ClientsPage() {
             {isLoading ? "" : `${clients.length} client${clients.length !== 1 ? "s" : ""}`}
           </p>
         </div>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" />
-              Nouveau client
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-lg">
-            <DialogHeader>
-              <DialogTitle>Nouveau client</DialogTitle>
-              <DialogDescription>
-                Remplissez les informations du client.
-              </DialogDescription>
-            </DialogHeader>
-            <ClientForm submitLabel="Créer le client" onSubmit={handleCreate} />
-          </DialogContent>
-        </Dialog>
+        <AddClientDialog
+          open={open}
+          onOpenChange={setOpen}
+          onSubmit={handleCreate}
+          triggerLabel="Nouveau client"
+        />
       </div>
 
-      {isLoading ? (
+      {isError ? (
+        <p className="text-sm text-red-600">Erreur lors du chargement des clients</p>
+      ) : isLoading ? (
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
             <SkeletonCard key={i} />
@@ -191,23 +218,12 @@ export default function ClientsPage() {
               Commencez par ajouter votre premier client.
             </p>
           </div>
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="mr-2 h-4 w-4" />
-                Ajouter un client
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-lg">
-              <DialogHeader>
-                <DialogTitle>Nouveau client</DialogTitle>
-                <DialogDescription>
-                  Remplissez les informations du client.
-                </DialogDescription>
-              </DialogHeader>
-              <ClientForm submitLabel="Créer le client" onSubmit={handleCreate} />
-            </DialogContent>
-          </Dialog>
+          <AddClientDialog
+            open={open}
+            onOpenChange={setOpen}
+            onSubmit={handleCreate}
+            triggerLabel="Ajouter un client"
+          />
         </div>
       ) : (
         <StaggerChildren
